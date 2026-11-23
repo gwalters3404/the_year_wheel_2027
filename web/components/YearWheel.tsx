@@ -26,7 +26,6 @@ export default function YearWheel({ initialDay }: { initialDay: number | null })
   const [mode, setMode] = useState<"day" | "all" | "saved">("day");
   const [open, setOpen] = useState<Set<number>>(() => new Set());
   const [zoom, setZoom] = useState<number | null>(null);
-  const [playing, setPlaying] = useState(false);
   const [hover, setHover] = useState<Cell | null>(null);
   const [tip, setTip] = useState({ x: 0, y: 0 });
   const [saved, setSaved] = useState<number[]>([]);
@@ -64,11 +63,6 @@ export default function YearWheel({ initialDay }: { initialDay: number | null })
   }, [sel, items]);
   useEffect(() => { if (zoom != null && !range && md(sel)[0] !== zoom) setZoom(md(sel)[0]); }, [sel, zoom, range]);
   useEffect(() => {
-    if (!playing) return;
-    const t = setInterval(() => setSel((s) => { if (s >= 364) { setPlaying(false); return s; } return s + 1; }), 150);
-    return () => clearInterval(t);
-  }, [playing]);
-  useEffect(() => {
     const t = setTimeout(() => { setQ(qText.trim().toLowerCase()); setOpen(new Set()); }, 150);
     return () => clearTimeout(t);
   }, [qText]);
@@ -77,7 +71,7 @@ export default function YearWheel({ initialDay }: { initialDay: number | null })
   const toggleSave = (id: number) => persist(savedSet.has(id) ? saved.filter((x) => x !== id) : [...saved, id]);
 
   const reset = () => { setQText(""); setQ(""); setRange(null); setMode("day"); setOpen(new Set()); setWhen(""); setHint(""); };
-  const select = useCallback((d: number) => { setPlaying(false); setSel(Math.max(0, Math.min(364, d))); setRange(null); setMode("day"); setWhen(""); setHint(""); }, []);
+  const select = useCallback((d: number) => { setSel(Math.max(0, Math.min(364, d))); setRange(null); setMode("day"); setWhen(""); setHint(""); }, []);
   const go = (d: number) => { reset(); select(d); };
 
   const applyWhen = (v: string, final: boolean) => {
@@ -86,7 +80,7 @@ export default function YearWheel({ initialDay }: { initialDay: number | null })
     if (r === false) { setHint(final || v.trim().length > 3 ? "Try a month, a date like Mar 3 or 3/3, or a range like Jun 1 to Jun 14." : ""); return; }
     setHint("");
     if (!r) { setRange(null); return; }
-    setMode("day"); setPlaying(false);
+    setMode("day");
     if (r[0] === r[1]) { setRange(null); setSel(r[0]); return; }
     setRange(r); setSel(r[0]);
     const [m] = md(r[0]);
@@ -277,7 +271,6 @@ export default function YearWheel({ initialDay }: { initialDay: number | null })
             {MON.map((m, i) => <button key={m} aria-pressed={zoom === i} onClick={() => zoomTo(i)}>{m}</button>)}
           </div>
           <div className="transport">
-            <button className="ghost play" onClick={() => { if (!playing) { reset(); if (sel >= 364) setSel(0); } setPlaying(!playing); }}>{playing ? "❚❚ Pause" : "▶ Play the year"}</button>
             <input type="range" min={0} max={364} value={sel} aria-label="Scrub through the year" onChange={(e) => go(+e.target.value)} />
           </div>
           <p className="caps note">{q || rings.size < NR ? `${mom(idx.matched)} ${idx.matched === 1 ? "matches" : "match"}` : "Drag around the wheel to scrub · click a month to zoom in"}</p>
