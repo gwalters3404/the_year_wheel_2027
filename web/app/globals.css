@@ -62,8 +62,6 @@ h1 b { font-weight: 500; }
 .zooms button { border: 1px solid var(--line); background: none; cursor: pointer; padding: 4px 8px; min-width: 3.4em; text-transform: uppercase; letter-spacing: .12em; font-size: 10.5px; font-weight: 400; color: var(--muted); }
 .zooms button:hover { border-color: var(--muted); color: var(--ink); }
 .zooms button[aria-pressed="true"] { border-color: var(--ink); color: var(--bg); background: var(--ink); }
-.transport { display: flex; align-items: center; gap: 14px; margin: 12px auto 0; max-width: 620px; }
-.transport input[type="range"] { flex: 1; min-width: 0; accent-color: var(--ink); }
 .note { margin: 10px auto 0; text-align: center; max-width: 56ch; }
 .upnext { margin: 18px auto 0; max-width: 620px; display: flex; flex-direction: column; }
 .upnext .caps { margin-bottom: 4px; }

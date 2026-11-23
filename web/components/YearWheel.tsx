@@ -270,9 +270,6 @@ export default function YearWheel({ initialDay }: { initialDay: number | null })
             <button aria-pressed={zoom == null} onClick={() => setZoom(null)}>Year</button>
             {MON.map((m, i) => <button key={m} aria-pressed={zoom === i} onClick={() => zoomTo(i)}>{m}</button>)}
           </div>
-          <div className="transport">
-            <input type="range" min={0} max={364} value={sel} aria-label="Scrub through the year" onChange={(e) => go(+e.target.value)} />
-          </div>
           <p className="caps note">{q || rings.size < NR ? `${mom(idx.matched)} ${idx.matched === 1 ? "matches" : "match"}` : "Drag around the wheel to scrub · click a month to zoom in"}</p>
 
           {upcoming.length > 0 && (

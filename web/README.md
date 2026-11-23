@@ -29,7 +29,6 @@ Then open `http://localhost:3000`. Use `npm run build` followed by `npm run star
 | Month zoom | Click a month name on the wheel, or a month button under it, and the wheel opens out to show that month day by day. "Year" or Escape zooms back out. |
 | Drag to scrub | Hold and drag around the wheel with a mouse to sweep through days. |
 | Cell tooltips | Hovering a cell names the day, the ring and the first few moments in it. |
-| Day slider | The slider under the wheel scrubs to any day of the year. |
 | Surprise me | Jumps to a random day. |
 | Coming up | Lists the next holidays and short events after the selected day, with a countdown in days. |
 | My list | The star beside any moment saves it in this browser. The list can be downloaded as a calendar file. |
