@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Year Wheel 2027</title>
+<title>The Year Wheel Reordered</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600&display=swap">
 <style>
@@ -15,6 +15,7 @@
   --body:"Jost","Century Gothic","Avenir Next",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.4;font-weight:300}
 a{color:inherit}
@@ -30,8 +31,9 @@ h1 b{font-weight:500}
 .today .caps{color:var(--today)}
 .today .td{font-family:var(--display);font-size:22px;font-weight:300;letter-spacing:.1em;text-transform:uppercase}
 .today:hover{background:color-mix(in srgb,var(--today) 12%,transparent)}
-.ramp .tk{margin-left:14px;align-items:center;gap:7px}
+.ramp .tk{align-items:center;gap:7px}
 .ramp .tk i{width:9px;height:9px;border-radius:50%;background:var(--today)}
+.ramp{flex-wrap:wrap;gap:6px 18px}
 .finders{flex:1 1 480px;max-width:700px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-start}
 .search{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:4px}
 .hint{font-size:12.5px;color:var(--warn);min-height:1.3em}
@@ -70,14 +72,18 @@ h1 b{font-weight:500}
 .note{margin:8px auto 0;text-align:center;max-width:56ch}
 
 /* lettered key */
-.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px 24px;margin-top:10px}
-.key{display:grid;grid-template-columns:1.1em 12px 1fr auto;gap:9px;align-items:center;padding:5px 0;border:0;border-bottom:1px solid var(--line);background:none;cursor:pointer;text-align:left;font-size:15px;font-weight:300}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 24px;margin-top:10px}
+.keyrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.keyrow:hover{border-bottom-color:var(--muted)}
+.key{display:grid;grid-template-columns:1.1em 12px 1fr auto;gap:9px;align-items:center;padding:5px 0;border:0;background:none;cursor:pointer;text-align:left;font-size:15px;font-weight:300;min-width:0}
+.iso{border:1px solid var(--line);background:none;cursor:pointer;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;color:var(--muted);padding:3px 7px;min-width:6.6em;text-align:center}
+.iso:hover{border-color:var(--muted);color:var(--ink)}
+.iso[aria-pressed="true"]{border-color:var(--ink);color:var(--bg);background:var(--ink)}
 .key b{font-weight:500}
 .key i{width:12px;height:12px;background:var(--c)}
 .key .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
 .key[aria-pressed="false"]{color:var(--faint)}
 .key[aria-pressed="false"] i{background:transparent;box-shadow:inset 0 0 0 1px var(--c)}
-.key:hover{border-bottom-color:var(--muted)}
 .ramp{display:flex;align-items:center;gap:8px;margin-top:12px}
 .ramp span{display:flex;gap:2px}
 .ramp i{width:14px;height:10px;background:var(--ink)}
@@ -115,28 +121,28 @@ footer a{color:var(--muted)}
 <div class="wrap">
   <header>
     <div>
-      <h1>Year Wheel <b>2027</b></h1>
+      <h1>The Year <b>Wheel</b></h1>
       <p class="sub">Find out what's happening on this date in 2027</p>
       <button class="today" id="today" type="button"><span class="caps">Explore today's date</span><span class="td" id="todaydate"></span></button>
     </div>
     <div class="finders">
-      <div class="search"><label class="caps" for="q">Search every moment</label><input id="q" type="search" placeholder="pizza, marathon, pride" autocomplete="off"></div>
+      <div class="search"><label class="caps" for="q">Keyword search</label><input id="q" type="search" placeholder="pizza, marathon, pride" autocomplete="off"></div>
       <div class="search"><label class="caps" for="when">Find a date or range</label><input id="when" type="search" placeholder="January, Mar 3, Jun 1 to Jun 14" autocomplete="off" aria-describedby="whenhint"><div class="hint" id="whenhint" aria-live="polite"></div></div>
     </div>
   </header>
   <div class="cols">
     <section class="wheelbox">
-      <svg id="wheel" viewBox="-515 -515 1030 1030" role="img" tabindex="0" aria-label="Wheel of the 365 days of 2027 with ten rings: holidays, music, film, sports, arts and culture, tech, industry, observances, births and deaths. Use the left and right arrow keys to move between days."></svg>
+      <svg id="wheel" viewBox="-515 -515 1030 1030" role="img" tabindex="0" aria-label="Wheel of the 365 days of 2027 with ten rings: tech, holidays, music, film, sports, arts and culture, industry, deaths, births and observances. Use the left and right arrow keys to move between days."></svg>
       <p class="caps note" id="matchnote">Hover a spoke to read a day · click to open it</p>
     </section>
     <div class="side">
       <section aria-label="Key to the rings">
-        <div class="caps">Rings, rim to hub · tap to hide or show</div>
+        <div class="caps">Click a color to hide or show</div>
         <div class="keys" id="keys"></div>
-        <div class="ramp caps"><span>fewer</span><span><i style="opacity:.25"></i><i style="opacity:.45"></i><i style="opacity:.65"></i><i style="opacity:.85"></i><i></i></span><span>more that day</span><span class="tk"><i></i>today</span></div>
+        <div class="ramp caps"><span class="tk"><i></i>today</span><button class="iso" id="seeall" type="button" aria-pressed="false">See all</button></div>
       </section>
       <section id="daycard">
-        <div class="dayhead"><h2 id="daytitle">Loading…</h2><div class="nav"><button class="btn" id="prev" aria-label="Previous day or range">←</button><button class="btn" id="next" aria-label="Next day or range">→</button></div></div>
+        <div class="dayhead" id="dayhead"><h2 id="daytitle">Loading…</h2><div class="nav"><button class="btn" id="prev" aria-label="Previous day or range">←</button><button class="btn" id="next" aria-label="Next day or range">→</button></div></div>
         <div class="caps" id="daysub"></div>
         <div id="daybody"></div>
       </section>
@@ -146,12 +152,12 @@ footer a{color:var(--muted)}
 </div>
 <script src="common.js"></script>
 <script>
-const RINGS=[["A","Holidays"],["B","Music"],["C","Film"],["D","Sports"],["E","Arts & culture"],["F","Tech"],["G","Industry"],["H","Observances"],["I","Births"],["J","Deaths"]];
+const RINGS=[["A","Tech"],["B","Holidays"],["C","Music"],["D","Film"],["E","Sports"],["F","Arts & culture"],["G","Industry"],["H","Deaths"],["I","Births"],["J","Observances"]];
 const NR=RINGS.length, GAP=8, R_OUT=440, PITCH=29, RW=27, R_IN=R_OUT-(NR-1)*PITCH-RW;
-function ringOf(it){ switch(it.t){ case "h":return 0; case "i":return 6; case "o":return 7; case "b":return 8; case "d":return 9; }
-  const c=it.c||""; return c.startsWith("Music")?1:c.startsWith("Film")?2:c.startsWith("Sports")?3:c.startsWith("Tech")?5:4; }
+function ringOf(it){ switch(it.t){ case "o":return 9; case "b":return 8; case "d":return 7; case "i":return 6; case "h":return 1; }
+  const c=it.c||""; return c.startsWith("Music")?2:c.startsWith("Film")?3:c.startsWith("Sports")?4:c.startsWith("Tech")?0:5; }
 const TODAY=todayDoy();
-const state={rings:new Set(RINGS.map((_,k)=>k)),q:"",sel:0,hov:null,range:null,open:new Set()}; let idx;
+const state={rings:new Set(RINGS.map((_,k)=>k)),q:"",sel:0,hov:null,range:null,all:false,open:new Set()}; let idx;
 const pass=it=>state.rings.has(it.r)&&(!state.q||it.hay.includes(state.q));
 const deg=i=>-90+GAP/2+i/365*(360-GAP), ang=i=>deg(i)*Math.PI/180;
 const pt=(r,a)=>(r*Math.cos(a)).toFixed(1)+","+(r*Math.sin(a)).toFixed(1);
@@ -163,8 +169,8 @@ function draw(){
   for(let d=0;d<365;d++) for(const it of idx.byDay[d]) cnt[it.r][d]++;
   let s="";
   for(let k=0;k<NR;k++){ const [r0,r1]=rr(k); s+=`<path class="track" d="${wedge(0,r0,r1,365)}" opacity="${state.rings.has(k)?.55:.25}"/>`;
-    const max=Math.max(1,...cnt[k]); s+=`<g class="cell" fill="var(--c${k})">`;
-    for(let d=0;d<365;d++) if(cnt[k][d]) s+=`<path d="${wedge(d,r0,r1)}" opacity="${(.25+.75*Math.sqrt(cnt[k][d]/max)).toFixed(2)}"/>`;
+    s+=`<g class="cell" fill="var(--c${k})">`;
+    for(let d=0;d<365;d++) if(cnt[k][d]) s+=`<path d="${wedge(d,r0,r1)}"/>`;
     s+=`</g><text class="ltr" x="0" y="${-(r0+r1)/2+4}" text-anchor="middle">${RINGS[k][0]}</text>`; }
   for(let m=0;m<12;m++){ const a=ang(MSTART[m]), c=Math.cos(a), n=Math.sin(a);
     if(m) s+=`<line class="mdiv" x1="${(R_IN*c).toFixed(1)}" y1="${(R_IN*n).toFixed(1)}" x2="${(R_OUT*c).toFixed(1)}" y2="${(R_OUT*n).toFixed(1)}"/>`;
@@ -177,20 +183,23 @@ function draw(){
   { const a=ang(TODAY+.5); s+=`<path class="tdy" d="${wedge(TODAY,R_IN-3,R_OUT+3)}"/><circle class="tdot" cx="${((R_OUT+11)*Math.cos(a)).toFixed(1)}" cy="${((R_OUT+11)*Math.sin(a)).toFixed(1)}" r="4.5"/><circle class="tdot" cx="${((R_IN-10)*Math.cos(a)).toFixed(1)}" cy="${((R_IN-10)*Math.sin(a)).toFixed(1)}" r="3"/>`; }
   s+=`<path id="hovmark" class="hov" d=""/><path id="selmark" class="sel" d=""/>`;
   s+=`<text class="hub1" id="hub1" y="-46" text-anchor="middle"></text><text class="hub2" id="hub2" y="10" text-anchor="middle"></text><text class="hub3" id="hub3" y="36" text-anchor="middle"></text><text class="hub4" id="hub4" y="62" text-anchor="middle"></text><text class="hub4" id="hub5" y="79" text-anchor="middle"></text>`;
-  for(let d=0;d<365;d++) s+=`<path class="hit" data-d="${d}" d="${wedge(d,R_IN,R_OUT+26)}"><title>${label(d)}: ${idx.byDay[d].length} moments</title></path>`;
+  for(let d=0;d<365;d++) s+=`<path class="hit" data-d="${d}" d="${wedge(d,R_IN,R_OUT+26)}"><title>${label(d)}: ${mom(idx.byDay[d].length)}</title></path>`;
   $("wheel").innerHTML=s;
-  $("matchnote").textContent=(state.q||state.rings.size<NR)?idx.matched.toLocaleString()+" moments match":"Hover a spoke to read a day · click to open it";
+  $("matchnote").textContent=(state.q||state.rings.size<NR)?mom(idx.matched)+(idx.matched===1?" matches":" match"):"Hover a spoke to read a day · click to open it";
+  $("seeall").setAttribute("aria-pressed",state.all);
   mark(); panel();
 }
+const mom=n=>n.toLocaleString()+(n===1?" moment":" moments");
 function rangeLabel([a,b]){ const [m,d1]=md(a),[m2,d2]=md(b); if(a===0&&b===364) return "All of 2027"; if(m===m2&&d1===1&&d2===DIM[m]) return MONL[m]; return label(a)+" to "+label(b); }
 function rangeItems(){ const [a,b]=state.range; return ITEMS.filter(it=>it.s!=null&&pass(it)&&it.s<=b&&(it.e==null?it.s:it.e)>=a).sort((x,y)=>x.s-y.s); }
 function hub(d){ $("hub2").style.fontSize="";
+  if(d==null&&state.all){ $("hub1").textContent="365 DAYS"; $("hub2").textContent="ALL OF 2027"; $("hub2").style.fontSize="27px"; $("hub3").textContent=mom(idx.matched).toUpperCase(); $("hub4").textContent=$("hub5").textContent=""; return; }
   if(d==null){ const [a,b]=state.range, t=rangeLabel(state.range).toUpperCase(); $("hub1").textContent=(b-a+1)+" DAYS"; $("hub2").textContent=t; $("hub2").style.fontSize=t.length>9?"27px":"40px";
     $("hub3").textContent=rangeItems().length.toLocaleString()+" MOMENTS"; $("hub4").textContent=$("hub5").textContent=""; return; }
   const l=idx.byDay[d]; $("hub1").textContent=WD[wday(d)].toUpperCase(); $("hub2").textContent=label(d).toUpperCase(); $("hub3").textContent=l.length+(l.length===1?" MOMENT":" MOMENTS");
-  const top=l.filter(x=>x.r===0).concat(l.filter(x=>x.t==="e"&&(x.e==null||x.e-x.s<10)),l.filter(x=>x.r===7)).slice(0,2).map(x=>x.n.length>28?x.n.slice(0,27)+"…":x.n);
+  const top=l.filter(x=>x.t==="h").concat(l.filter(x=>x.t==="e"&&(x.e==null||x.e-x.s<10)),l.filter(x=>x.t==="o")).slice(0,2).map(x=>x.n.length>28?x.n.slice(0,27)+"…":x.n);
   $("hub4").textContent=top[0]||""; $("hub5").textContent=top[1]||""; }
-function mark(){ $("selmark").setAttribute("d",state.range?"":wedge(state.sel,R_IN-3,R_OUT+3)); $("hovmark").setAttribute("d",state.hov!=null&&state.hov!==state.sel?wedge(state.hov,R_IN-3,R_OUT+3):""); hub(state.hov!=null?state.hov:state.range?null:state.sel); }
+function mark(){ $("selmark").setAttribute("d",state.range||state.all?"":wedge(state.sel,R_IN-3,R_OUT+3)); $("hovmark").setAttribute("d",state.hov!=null&&state.hov!==state.sel?wedge(state.hov,R_IN-3,R_OUT+3):""); hub(state.hov!=null?state.hov:state.range||state.all?null:state.sel); }
 function status(it){ if(!it.st) return ""; const cls=it.st==="Confirmed"||it.st==="Listed"?"ok":(it.st==="Estimated"||it.st==="TBD"?"warn":"");
   return `<span class="st ${cls}" title="${esc(it.x||"")}">${esc(it.st)}</span>`; }
 function entry(it,n,showDate,go){
@@ -207,21 +216,27 @@ function groups(list,showDate,go,cap){ let h="",n=0;
     h+=`<div class="grp" style="--c:var(--c${k})"><h3><i></i>${RINGS[k][0]} · ${RINGS[k][1]} <span>${sub.length.toLocaleString()}</span></h3><ol class="items">${shown.map(x=>entry(x,++n,showDate,go)).join("")}</ol>${cut?`<button class="more" data-more="${k}">Show all ${sub.length.toLocaleString()}</button>`:""}</div>`; }
   return h; }
 function panel(){
+  $("dayhead").hidden=state.all;
+  if(state.all){ const res=ITEMS.filter(pass).sort((a,b)=>(a.s==null?999:a.s)-(b.s==null?999:b.s));
+    $("daysub").textContent=mom(res.length)+" · all of 2027"+(state.q?" · matching “"+state.q+"”":"");
+    $("daybody").innerHTML=res.length?groups(res,true,true,30):'<p class="empty-note">Nothing to show. Turn a color back on or clear the search.</p>'; return; }
   if(state.range){ const res=rangeItems(), [a,b]=state.range;
-    $("daytitle").textContent=rangeLabel(state.range); $("daysub").textContent=res.length.toLocaleString()+" moments · "+(b-a+1)+" days"+(state.q?" · matching “"+state.q+"”":"");
+    $("daytitle").textContent=rangeLabel(state.range); $("daysub").textContent=mom(res.length)+" · "+(b-a+1)+" days"+(state.q?" · matching “"+state.q+"”":"");
     $("daybody").innerHTML=res.length?groups(res,true,true,30):'<p class="empty-note">Nothing matches in this range.</p>'; return; }
   if(state.q){ const res=ITEMS.filter(pass).sort((a,b)=>(a.s==null?999:a.s)-(b.s==null?999:b.s));
-    $("daytitle").textContent="Search results"; $("daysub").textContent=res.length.toLocaleString()+" matches for “"+state.q+"”"+(res.length>300?" · showing the first 300":"");
-    $("daybody").innerHTML=res.length?groups(res.slice(0,300),true,true):'<p class="empty-note">No matches. Try a shorter word.</p>'; return; }
+    $("daytitle").textContent="Search results"; $("daysub").textContent=res.length.toLocaleString()+(res.length===1?" match":" matches")+" for “"+state.q+"”";
+    $("daybody").innerHTML=res.length?groups(res,true,true,30):'<p class="empty-note">No matches. Try a shorter word.</p>'; return; }
   const d=state.sel, l=idx.byDay[d], run=idx.running[d];
-  $("daytitle").textContent=dayTitle(d); $("daysub").textContent=l.length+" moments · day "+(d+1)+" of 365";
+  $("daytitle").textContent=dayTitle(d); $("daysub").textContent=mom(l.length)+" · day "+(d+1)+" of 365";
   let h=groups(l,false,false);
   if(run.length) h+=`<details><summary>${run.length} week- and month-long observances also running</summary><ol class="items">${run.map((x,i)=>entry(x,i+1,true,false)).join("")}</ol></details>`;
   $("daybody").innerHTML=h||'<p class="empty-note">Nothing matches the current filters on this day.</p>'; }
 function keysHTML(){ const counts=new Array(NR).fill(0); for(const it of ITEMS) counts[it.r]++;
-  return RINGS.map(([L,n],k)=>`<button class="key" style="--c:var(--c${k})" data-r="${k}" aria-pressed="${state.rings.has(k)}"><b>${L}</b><i></i><span>${n}</span><span class="n">${counts[k].toLocaleString()}</span></button>`).join(""); }
-function select(d,quiet){ state.sel=Math.max(0,Math.min(364,d)); if(!quiet) setHash(state.sel); mark(); panel(); }
-function clearQ(){ if(state.q||state.range){ state.q=""; $("q").value=""; state.range=null; state.open.clear(); $("when").value=""; $("whenhint").textContent=""; draw(); } }
+  return RINGS.map(([L,n],k)=>{ const only=state.rings.size===1&&state.rings.has(k);
+    return `<div class="keyrow"><button class="key" style="--c:var(--c${k})" data-r="${k}" aria-pressed="${state.rings.has(k)}" aria-label="${n}, ${counts[k].toLocaleString()} moments, ${state.rings.has(k)?"shown":"hidden"}"><b>${L}</b><i></i><span>${n}</span><span class="n">${counts[k].toLocaleString()}</span></button><button class="iso" data-iso="${k}" aria-pressed="${only}" aria-label="${only?"Show all rings":"Show only "+n}">${only?"Show all":"Isolate"}</button></div>`; }).join(""); }
+function rekey(sel){ $("keys").innerHTML=keysHTML(); const el=$("keys").querySelector(sel); if(el) el.focus({preventScroll:true}); draw(); }
+function select(d,quiet){ if(!state.range){ $("when").value=""; $("whenhint").textContent=""; } state.sel=Math.max(0,Math.min(364,d)); if(!quiet) setHash(state.sel); mark(); panel(); }
+function clearQ(){ if(state.q||state.range||state.all){ state.all=false; state.q=""; $("q").value=""; state.range=null; state.open.clear(); $("when").value=""; $("whenhint").textContent=""; draw(); } }
 function parsePart(t,ctxMonth){ t=t.trim().replace(/,?\s*2027$/,"").replace(/(\d)(st|nd|rd|th)\b/g,"$1").trim(); let m,day,x;
   const mon=w=>{ const k=w.slice(0,3); const i=MON.findIndex(n=>n.toLowerCase()===k); return i>=0&&MONL[i].toLowerCase().startsWith(w.replace(/\.$/,""))?i:-1; };
   if(x=/^q([1-4])$/.exec(t)){ const q=+x[1]-1; return [MSTART[q*3],MSTART[q*3+2]+DIM[q*3+2]-1]; }
@@ -237,7 +252,7 @@ function parseWhen(v){ v=v.toLowerCase().trim(); if(!v) return null;
   const parts=v.split(/\s+(?:to|through|thru|until)\s+|\s*[–—-]\s*/); if(parts.length>2) return false;
   const a=parsePart(parts[0]); if(!a) return false; if(parts.length===1) return [a[0],a[1]];
   const b=parsePart(parts[1],a[2]); if(!b||b[1]<a[0]) return false; return [a[0],b[1]]; }
-function applyWhen(v,final){ const r=parseWhen(v); state.open.clear();
+function applyWhen(v,final){ const r=parseWhen(v); state.open.clear(); if(r) state.all=false;
   if(r===false){ $("whenhint").textContent=final||v.trim().length>3?"Try a month, a date like Mar 3 or 3/3, or a range like Jun 1 to Jun 14.":""; return; }
   $("whenhint").textContent="";
   if(!r){ if(state.range){ state.range=null; draw(); } return; }
@@ -249,9 +264,12 @@ $("wheel").addEventListener("keydown",ev=>{ const step={ArrowLeft:-1,ArrowRight:
 document.addEventListener("click",ev=>{
   const c=ev.target.closest("[data-d]"); if(c){ clearQ(); select(+c.dataset.d); return; }
   const g=ev.target.closest("[data-go]"); if(g){ ev.preventDefault(); clearQ(); select(+g.dataset.go); return; }
+  if(ev.target.closest("#seeall")){ state.all=!state.all; state.open.clear(); if(state.all){ state.range=null; $("when").value=""; $("whenhint").textContent=""; } draw(); return; }
   if(ev.target.closest("#today")){ clearQ(); select(TODAY); return; }
   const mo=ev.target.closest("[data-more]"); if(mo){ state.open.add(+mo.dataset.more); panel(); return; }
-  const ky=ev.target.closest("[data-r]"); if(ky){ const k=+ky.dataset.r; state.rings.has(k)?state.rings.delete(k):state.rings.add(k); ky.setAttribute("aria-pressed",state.rings.has(k)); draw(); return; }
+  const iso=ev.target.closest("[data-iso]"); if(iso){ const k=+iso.dataset.iso, only=state.rings.size===1&&state.rings.has(k);
+    state.rings=new Set(only?RINGS.map((_,j)=>j):[k]); state.open.clear(); rekey(`[data-iso="${k}"]`); return; }
+  const ky=ev.target.closest("[data-r]"); if(ky){ const k=+ky.dataset.r; state.rings.has(k)?state.rings.delete(k):state.rings.add(k); rekey(`[data-r="${k}"]`); return; }
   if(ev.target.id==="prev"||ev.target.id==="next"){ const st=ev.target.id==="prev"?-1:1;
     if(state.range){ const [m]=md(state.range[0]), [a,b]=state.range, whole=a===MSTART[m]&&b===a+DIM[m]-1;
       if(whole){ const n=(m+st+12)%12; state.range=[MSTART[n],MSTART[n]+DIM[n]-1]; }
@@ -259,7 +277,7 @@ document.addEventListener("click",ev=>{
       state.sel=state.range[0]; state.open.clear(); $("when").value=rangeLabel(state.range); draw(); }
     else select(state.sel+st); }
 });
-let tmr; $("q").addEventListener("input",ev=>{ clearTimeout(tmr); tmr=setTimeout(()=>{ state.q=ev.target.value.trim().toLowerCase(); draw(); },140); });
+let tmr; $("q").addEventListener("input",ev=>{ clearTimeout(tmr); tmr=setTimeout(()=>{ state.q=ev.target.value.trim().toLowerCase(); state.open.clear(); draw(); },140); });
 let tmr2; $("when").addEventListener("input",ev=>{ clearTimeout(tmr2); tmr2=setTimeout(()=>applyWhen(ev.target.value,false),350); });
 $("when").addEventListener("keydown",ev=>{ if(ev.key==="Enter"){ clearTimeout(tmr2); applyWhen(ev.target.value,true); } });
 window.addEventListener("hashchange",()=>{ const d=hashDay(); if(d!=null) select(d,true); });
