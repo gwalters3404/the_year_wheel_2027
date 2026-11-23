@@ -10,7 +10,7 @@
   --bg:#242322; --panel:#2d2c2a; --ink:#f1eee6; --muted:#a39f95; --faint:#6f6c65; --line:#44423e;
   --c0:#e5412f; --c1:#f28a2a; --c2:#f5d13b; --c3:#86bd43; --c4:#27a79a;
   --c5:#3d8fd6; --c6:#9566b8; --c7:#ea6fa5; --c8:#f1eee6; --c9:#96938c;
-  --ok:#86bd43; --warn:#f2a93b;
+  --ok:#86bd43; --warn:#f2a93b; --today:#ffe066;
   --display:"Jost","Century Gothic","Avenir Next",Futura,sans-serif;
   --body:"Jost","Century Gothic","Avenir Next",system-ui,sans-serif;
 }
@@ -26,6 +26,12 @@ header{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-co
 h1{font-family:var(--display);font-weight:200;font-size:clamp(32px,5.2vw,62px);line-height:1;margin:0;letter-spacing:.14em;text-transform:uppercase;text-wrap:balance}
 h1 b{font-weight:500}
 .sub{margin:10px 0 0;max-width:60ch;color:var(--muted);font-size:15px}
+.today{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-top:16px;padding:8px 14px;border:1px solid var(--today);background:none;cursor:pointer;text-align:left}
+.today .caps{color:var(--today)}
+.today .td{font-family:var(--display);font-size:22px;font-weight:300;letter-spacing:.1em;text-transform:uppercase}
+.today:hover{background:color-mix(in srgb,var(--today) 12%,transparent)}
+.ramp .tk{margin-left:14px;align-items:center;gap:7px}
+.ramp .tk i{width:9px;height:9px;border-radius:50%;background:var(--today)}
 .finders{flex:1 1 480px;max-width:700px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-start}
 .search{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:4px}
 .hint{font-size:12.5px;color:var(--warn);min-height:1.3em}
@@ -57,6 +63,8 @@ h1 b{font-weight:500}
 #wheel .sel{stroke:var(--ink);stroke-width:1.8;fill:none}
 #wheel .dim{fill:var(--bg);opacity:.72}
 #wheel .rng{stroke:var(--ink);stroke-width:1.4;fill:none}
+#wheel .tdy{stroke:var(--today);stroke-width:1.8;fill:var(--today);fill-opacity:.18}
+#wheel .tdot{fill:var(--today)}
 #wheel .hov{stroke:var(--ink);stroke-width:.9;fill:var(--ink);fill-opacity:.12}
 @media (max-width:560px){#wheel .dn{display:none}#wheel .mon{font-size:19px}#wheel .ltr{font-size:15px}#wheel .hub1,#wheel .hub3{font-size:15px}#wheel .hub4{font-size:16px}}
 .note{margin:8px auto 0;text-align:center;max-width:56ch}
@@ -108,7 +116,8 @@ footer a{color:var(--muted)}
   <header>
     <div>
       <h1>Year Wheel <b>2027</b></h1>
-      <p class="sub">365 days around the wheel, ten kinds of moment from the rim to the hub. A brighter cell means more is happening that day.</p>
+      <p class="sub">Find out what's happening on this date in 2027</p>
+      <button class="today" id="today" type="button"><span class="caps">Explore today's date</span><span class="td" id="todaydate"></span></button>
     </div>
     <div class="finders">
       <div class="search"><label class="caps" for="q">Search every moment</label><input id="q" type="search" placeholder="pizza, marathon, pride" autocomplete="off"></div>
@@ -124,7 +133,7 @@ footer a{color:var(--muted)}
       <section aria-label="Key to the rings">
         <div class="caps">Rings, rim to hub · tap to hide or show</div>
         <div class="keys" id="keys"></div>
-        <div class="ramp caps"><span>fewer</span><span><i style="opacity:.25"></i><i style="opacity:.45"></i><i style="opacity:.65"></i><i style="opacity:.85"></i><i></i></span><span>more that day</span></div>
+        <div class="ramp caps"><span>fewer</span><span><i style="opacity:.25"></i><i style="opacity:.45"></i><i style="opacity:.65"></i><i style="opacity:.85"></i><i></i></span><span>more that day</span><span class="tk"><i></i>today</span></div>
       </section>
       <section id="daycard">
         <div class="dayhead"><h2 id="daytitle">Loading…</h2><div class="nav"><button class="btn" id="prev" aria-label="Previous day or range">←</button><button class="btn" id="next" aria-label="Next day or range">→</button></div></div>
@@ -133,7 +142,7 @@ footer a{color:var(--muted)}
       </section>
     </div>
   </div>
-  <footer>Status labels show whether a date is confirmed, listed, calculated or estimated (checked Nov 22, 2026). Week- and month-long observances are counted on the day they start. Data adapted from Sean's Cultural Moments Encyclopedia. Wheel layout after “Colours in Cultures” by David McCandless and AlwaysWithHonor for Information is Beautiful.</footer>
+  <footer>Status labels show whether a date is confirmed, listed, calculated or estimated (checked Nov 22, 2026). Week- and month-long observances are counted on the day they start. Wheel layout inspired by “Colours in Cultures” by David McCandless and AlwaysWithHonor for Information is Beautiful.</footer>
 </div>
 <script src="common.js"></script>
 <script>
@@ -141,6 +150,7 @@ const RINGS=[["A","Holidays"],["B","Music"],["C","Film"],["D","Sports"],["E","Ar
 const NR=RINGS.length, GAP=8, R_OUT=440, PITCH=29, RW=27, R_IN=R_OUT-(NR-1)*PITCH-RW;
 function ringOf(it){ switch(it.t){ case "h":return 0; case "i":return 6; case "o":return 7; case "b":return 8; case "d":return 9; }
   const c=it.c||""; return c.startsWith("Music")?1:c.startsWith("Film")?2:c.startsWith("Sports")?3:c.startsWith("Tech")?5:4; }
+const TODAY=todayDoy();
 const state={rings:new Set(RINGS.map((_,k)=>k)),q:"",sel:0,hov:null,range:null,open:new Set()}; let idx;
 const pass=it=>state.rings.has(it.r)&&(!state.q||it.hay.includes(state.q));
 const deg=i=>-90+GAP/2+i/365*(360-GAP), ang=i=>deg(i)*Math.PI/180;
@@ -164,6 +174,7 @@ function draw(){
     const am=ang(MSTART[m]+DIM[m]/2); s+=`<text class="mon" x="${(488*Math.cos(am)).toFixed(1)}" y="${(488*Math.sin(am)+5).toFixed(1)}" text-anchor="middle">${MON[m].toUpperCase()}</text>`; }
   if(state.range){ const [a,b]=state.range; if(a>0) s+=`<path class="dim" d="${wedge(0,R_IN-1,R_OUT+1,a)}"/>`; if(b<364) s+=`<path class="dim" d="${wedge(b+1,R_IN-1,R_OUT+1,365)}"/>`;
     s+=`<path class="rng" d="${wedge(a,R_IN-3,R_OUT+3,b+1)}"/>`; }
+  { const a=ang(TODAY+.5); s+=`<path class="tdy" d="${wedge(TODAY,R_IN-3,R_OUT+3)}"/><circle class="tdot" cx="${((R_OUT+11)*Math.cos(a)).toFixed(1)}" cy="${((R_OUT+11)*Math.sin(a)).toFixed(1)}" r="4.5"/><circle class="tdot" cx="${((R_IN-10)*Math.cos(a)).toFixed(1)}" cy="${((R_IN-10)*Math.sin(a)).toFixed(1)}" r="3"/>`; }
   s+=`<path id="hovmark" class="hov" d=""/><path id="selmark" class="sel" d=""/>`;
   s+=`<text class="hub1" id="hub1" y="-46" text-anchor="middle"></text><text class="hub2" id="hub2" y="10" text-anchor="middle"></text><text class="hub3" id="hub3" y="36" text-anchor="middle"></text><text class="hub4" id="hub4" y="62" text-anchor="middle"></text><text class="hub4" id="hub5" y="79" text-anchor="middle"></text>`;
   for(let d=0;d<365;d++) s+=`<path class="hit" data-d="${d}" d="${wedge(d,R_IN,R_OUT+26)}"><title>${label(d)}: ${idx.byDay[d].length} moments</title></path>`;
@@ -238,6 +249,7 @@ $("wheel").addEventListener("keydown",ev=>{ const step={ArrowLeft:-1,ArrowRight:
 document.addEventListener("click",ev=>{
   const c=ev.target.closest("[data-d]"); if(c){ clearQ(); select(+c.dataset.d); return; }
   const g=ev.target.closest("[data-go]"); if(g){ ev.preventDefault(); clearQ(); select(+g.dataset.go); return; }
+  if(ev.target.closest("#today")){ clearQ(); select(TODAY); return; }
   const mo=ev.target.closest("[data-more]"); if(mo){ state.open.add(+mo.dataset.more); panel(); return; }
   const ky=ev.target.closest("[data-r]"); if(ky){ const k=+ky.dataset.r; state.rings.has(k)?state.rings.delete(k):state.rings.add(k); ky.setAttribute("aria-pressed",state.rings.has(k)); draw(); return; }
   if(ev.target.id==="prev"||ev.target.id==="next"){ const st=ev.target.id==="prev"?-1:1;
@@ -251,7 +263,7 @@ let tmr; $("q").addEventListener("input",ev=>{ clearTimeout(tmr); tmr=setTimeout
 let tmr2; $("when").addEventListener("input",ev=>{ clearTimeout(tmr2); tmr2=setTimeout(()=>applyWhen(ev.target.value,false),350); });
 $("when").addEventListener("keydown",ev=>{ if(ev.key==="Enter"){ clearTimeout(tmr2); applyWhen(ev.target.value,true); } });
 window.addEventListener("hashchange",()=>{ const d=hashDay(); if(d!=null) select(d,true); });
-loadData().then(()=>{ for(const it of ITEMS) it.r=ringOf(it); const d=hashDay(); state.sel=d!=null?d:todayDoy(); $("keys").innerHTML=keysHTML(); draw(); })
+loadData().then(()=>{ for(const it of ITEMS) it.r=ringOf(it); const d=hashDay(); state.sel=d!=null?d:TODAY; { const [m,day]=md(TODAY); $("todaydate").textContent=MONL[m]+" "+day; } $("keys").innerHTML=keysHTML(); draw(); })
   .catch(()=>{ $("daytitle").textContent="The data file did not load"; $("daysub").textContent="Reload the page to try again."; });
 </script>
 
